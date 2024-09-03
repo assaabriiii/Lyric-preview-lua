@@ -4,6 +4,11 @@ don't forget to install love2D from https://love2d.org
 
 for calling the API i've used a python script since lua didn't support https requests or at least i don't know how.
 
+also it can detect your spotify current music and automatcally shows the lyrics for the app, just install ```spotify``` via homebrew: 
+```bash
+brew install --cask spotify
+```
+
 
 ### Search artist name and title of the music
 ![alt text](resource/menu.png)
