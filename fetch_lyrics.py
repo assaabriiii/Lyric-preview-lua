@@ -2,6 +2,8 @@ import sys
 import requests
 
 def fetch_lyrics(artist, title):
+    artist = artist.strip()
+    title = title.strip()
     url = f"https://api.lyrics.ovh/v1/{artist}/{title}"
     response = requests.get(url)
     if response.status_code == 200:
