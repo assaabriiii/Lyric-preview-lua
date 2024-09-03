@@ -38,6 +38,9 @@ function love.load()
             speed = math.random(raindropSpeedMin, raindropSpeedMax)
         })
     end
+    
+    -- Automatically check Spotify status and fetch lyrics
+    checkSpotifyAndFetchLyrics()
 end
 
 function love.update(dt)
@@ -102,6 +105,31 @@ function love.keypressed(key)
     end
 end
 
+function checkSpotifyAndFetchLyrics()
+    -- Run the `spotify status` command and capture its output
+    local handle_music = io.popen("python3 spy_music.py")
+    local result_music = handle_music:read("*a")
+    handle_music:close()
+
+    local handle_artist = io.popen("python3 spy_artist.py")
+    local result_artist = handle_artist:read("*a")
+    handle_artist:close()
+
+    local handle_status = io.popen("python3 spy_status.py")
+    local result_status = handle_status:read("*a")
+    handle_status:close()
+    result_status = result_status:gsub("^%s*(.-)%s*$", "%1")
+    
+    if result_status == "true" then
+        artist, title = result_artist, result_music
+        searchLyrics()
+        currentPage = "lyrics"
+    else
+        artist, title = "", ""
+        lyrics = "Spotify is not playing or song information not found."
+    end
+end
+
 function searchLyrics()
     local artist_enc = artist:gsub(" ", "%%20")
     local title_enc = title:gsub(" ", "%%20")
@@ -113,7 +141,7 @@ function searchLyrics()
     handle:close()
 
     -- Process the result
-    lyrics = result or "Lyrics not found or error occurred."
+    lyrics = result or "Lyrics not found or error occurred. (probably some unknown bullshit language)"
 end
 
 function love.draw()
@@ -129,6 +157,7 @@ function love.draw()
         love.graphics.print("Title: " .. title, 10, 30)
         
         love.graphics.setColor(instructionColor)
+        
         love.graphics.print("Press TAB to switch input field", 10, 50)
         love.graphics.print("Press RETURN to search", 10, 70)
         love.graphics.print("Press ESC to go back to input page from lyrics", 10, 90)
@@ -158,7 +187,6 @@ function love.draw()
         end
     end
 end
-
 
 -- Helper function to split a string by newline
 function string:split(delimiter)
