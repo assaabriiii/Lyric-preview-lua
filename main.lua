@@ -15,6 +15,12 @@ scrollY = 0
 scrollSpeed = 20
 currentPage = "input" -- "input" or "lyrics"
 
+-- Variables for rain effect
+raindrops = {}
+raindropCount = 100 -- Number of raindrops
+raindropSpeedMin = 2 -- Minimum speed of raindrops
+raindropSpeedMax = 6 -- Maximum speed of raindrops
+
 function love.load()
     love.window.setTitle("Lyrics Finder")
     love.window.setMode(800, 600)
@@ -23,6 +29,28 @@ function love.load()
     title = ""
     lyrics = ""
     searchTriggered = false
+    
+    -- Initialize raindrops
+    for i = 1, raindropCount do
+        table.insert(raindrops, {
+            x = math.random(0, love.graphics.getWidth()),
+            y = math.random(0, love.graphics.getHeight()),
+            speed = math.random(raindropSpeedMin, raindropSpeedMax)
+        })
+    end
+end
+
+function love.update(dt)
+    if currentPage == "lyrics" then
+        -- Update raindrops
+        for _, drop in ipairs(raindrops) do
+            drop.y = drop.y + drop.speed
+            if drop.y > love.graphics.getHeight() then
+                drop.y = 0
+                drop.x = math.random(0, love.graphics.getWidth())
+            end
+        end
+    end
 end
 
 function love.textinput(text)
@@ -105,8 +133,11 @@ function love.draw()
         love.graphics.print("Press RETURN to search", 10, 70)
         love.graphics.print("Press ESC to go back to input page from lyrics", 10, 90)
     elseif currentPage == "lyrics" then
-        love.graphics.setColor(instructionColor)
-        love.graphics.print("", 10, 10)
+        -- Draw the rain effect
+        love.graphics.setColor(1, 1, 1, 0.5) -- Light white, slightly transparent
+        for _, drop in ipairs(raindrops) do
+            love.graphics.line(drop.x, drop.y, drop.x, drop.y + 10)
+        end
         
         -- Set the starting y position based on scrollY
         local startY = 30 - scrollY
