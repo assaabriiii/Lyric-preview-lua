@@ -107,7 +107,7 @@ function searchLyrics()
     local title_enc = title:gsub(" ", "%%20")
     
     -- Run the Python script and capture its output
-    local command = string.format('python3 fetch_lyrics.py "%s" "%s"', artist_enc, title_enc)
+    local command = string.format('python3 /Users/amir/Documents/2024/September-2024/lyric/lyric/Lyric-preview-lua/fetch_lyrics.py "%s" "%s"', artist_enc, title_enc)
     local handle = io.popen(command)
     local result = handle:read("*a")
     handle:close()
@@ -143,15 +143,22 @@ function love.draw()
         local startY = 30 - scrollY
         local lineHeight = 20 -- Adjust line height as needed
         
-        -- Render each line of the lyrics with alternating colors
+        -- Render each line of the lyrics centered with alternating colors
         for i, line in ipairs(lyrics:split("\n")) do
+            -- Calculate the width of the line
+            local lineWidth = love.graphics.getFont():getWidth(line)
+            
+            -- Calculate the x-position to center the line
+            local xPos = (love.graphics.getWidth() - lineWidth) / 2
+            
             -- Cycle through the colors
             local color = lyricsColors[(i - 1) % #lyricsColors + 1]
             love.graphics.setColor(color)
-            love.graphics.print(line, 10, startY + (i - 1) * lineHeight)
+            love.graphics.print(line, xPos, startY + (i - 1) * lineHeight)
         end
     end
 end
+
 
 -- Helper function to split a string by newline
 function string:split(delimiter)
