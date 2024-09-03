@@ -19,4 +19,4 @@ brew install --cask spotify
 
 
 ### I've added a raindrops effect for simulating your brain
-[Watch the rain effect video](resource/rain.mp4)
+![ezgif-6-9b4289902f](https://github.com/user-attachments/assets/ad2be43b-cdd3-4d3e-8563-bd6dd28dffbd)
