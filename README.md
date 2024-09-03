@@ -11,3 +11,7 @@ for calling the API i've used a python script since lua didn't support https req
 
 ### Lyrics preview
 ![alt text](resource/lyrics.png)
+
+
+### I've added a raindrops effect for simulating your brain
+[Watch the rain effect video](resource/rain.mp4)
