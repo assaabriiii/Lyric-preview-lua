@@ -135,7 +135,7 @@ function searchLyrics()
     local title_enc = title:gsub(" ", "%%20")
     
     -- Run the Python script and capture its output
-    local command = string.format('python3 /Users/amir/Documents/2024/September-2024/lyric/lyric/Lyric-preview-lua/fetch_lyrics.py "%s" "%s"', artist_enc, title_enc)
+    local command = string.format('python3 fetch_lyrics.py "%s" "%s"', artist_enc, title_enc)
     local handle = io.popen(command)
     local result = handle:read("*a")
     handle:close()
