@@ -1,3 +1,7 @@
+-- nerd font
+local font
+
+
 -- Variables for colors
 backgroundColor = {0.1, 0.1, 0.3} -- Dark blue background
 artistColor = {1, 1, 0.5} -- Light yellow
@@ -24,7 +28,7 @@ raindropSpeedMax = 6 -- Maximum speed of raindrops
 function love.load()
     love.window.setTitle("Lyrics Finder")
     love.window.setMode(800, 600)
-    
+    font = love.graphics.newFont("nerdfont.ttf", 13)
     artist = ""
     title = ""
     lyrics = ""
@@ -107,15 +111,15 @@ end
 
 function checkSpotifyAndFetchLyrics()
     -- Run the `spotify status` command and capture its output
-    local handle_music = io.popen("python3 spy_music.py")
+    local handle_music = io.popen("python3 /Users/amir/Documents/2024/September-2024/lyric/lyric/Lyric-preview-lua/spy_music.py")
     local result_music = handle_music:read("*a")
     handle_music:close()
 
-    local handle_artist = io.popen("python3 spy_artist.py")
+    local handle_artist = io.popen("python3 /Users/amir/Documents/2024/September-2024/lyric/lyric/Lyric-preview-lua/spy_artist.py")
     local result_artist = handle_artist:read("*a")
     handle_artist:close()
 
-    local handle_status = io.popen("python3 spy_status.py")
+    local handle_status = io.popen("python3 /Users/amir/Documents/2024/September-2024/lyric/lyric/Lyric-preview-lua/spy_status.py")
     local result_status = handle_status:read("*a")
     handle_status:close()
     result_status = result_status:gsub("^%s*(.-)%s*$", "%1")
@@ -135,7 +139,7 @@ function searchLyrics()
     local title_enc = title:gsub(" ", "%%20")
     
     -- Run the Python script and capture its output
-    local command = string.format('python3 fetch_lyrics.py "%s" "%s"', artist_enc, title_enc)
+    local command = string.format('python3 /Users/amir/Documents/2024/September-2024/lyric/lyric/Lyric-preview-lua/fetch_lyrics.py "%s" "%s"', artist_enc, title_enc)
     local handle = io.popen(command)
     local result = handle:read("*a")
     handle:close()
@@ -147,8 +151,10 @@ end
 function love.draw()
     -- Set background color
     love.graphics.clear(backgroundColor)
+    love.graphics.setFont(font)
     
     if currentPage == "input" then
+        -- checkSpotifyAndFetchLyrics()
         -- Set colors for artist, title, and instructions
         love.graphics.setColor(artistColor)
         love.graphics.print("Artist: " .. artist, 10, 10)
@@ -162,6 +168,7 @@ function love.draw()
         love.graphics.print("Press RETURN to search", 10, 70)
         love.graphics.print("Press ESC to go back to input page from lyrics", 10, 90)
     elseif currentPage == "lyrics" then
+        -- checkSpotifyAndFetchLyrics()
         -- Draw the rain effect
         love.graphics.setColor(1, 1, 1, 0.5) -- Light white, slightly transparent
         for _, drop in ipairs(raindrops) do
